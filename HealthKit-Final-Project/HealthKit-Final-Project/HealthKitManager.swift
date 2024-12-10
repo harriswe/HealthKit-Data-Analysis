@@ -1,20 +1,13 @@
-//
-//  HealthDataManager.swift
-//  HealthKit-Final-Project
-//
-//  Created by Wesley Harrison on 12/8/24.
-//
-
-// HealthDataManager.swift
 import Foundation
 import HealthKit
+import SwiftUI
 
 class HealthKitManager: ObservableObject {
-        private var healthStore: HKHealthStore
+    private var healthStore: HKHealthStore
 
-        init(healthStore: HKHealthStore) {
-            self.healthStore = healthStore
-        }
+    init(healthStore: HKHealthStore) {
+        self.healthStore = healthStore
+    }
 
     // Request HealthKit Authorization
     func requestAuthorization(completion: @escaping (Bool) -> Void) {
@@ -64,3 +57,4 @@ class HealthKitManager: ObservableObject {
         healthStore.execute(query)
     }
 }
+
