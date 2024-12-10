@@ -1,17 +1,18 @@
-//
-//  HealthKit_Final_ProjectApp.swift
-//  HealthKit-Final-Project
-//
-//  Created by Wesley Harrison on 12/5/24.
-//
-
+// HealthKit_Final_ProjectApp.swift
 import SwiftUI
+import HealthKit
 
 @main
 struct HealthKit_Final_ProjectApp: App {
+    // Initialize HealthStore
+    let healthStore = HKHealthStore()
+
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environmentObject(HealthKitManager(healthStore: healthStore))
         }
     }
 }
+
+

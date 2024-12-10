@@ -9,7 +9,7 @@
 import Foundation
 import HealthKit
 
-class HealthDataManager: ObservableObject {
+class HealthKitManager: ObservableObject {
         private var healthStore: HKHealthStore
 
         init(healthStore: HKHealthStore) {
