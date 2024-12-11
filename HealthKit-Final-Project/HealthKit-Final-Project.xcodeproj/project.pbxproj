@@ -35,16 +35,6 @@
 			path = "HealthKit-Final-Project";
 			sourceTree = "<group>";
 		};
-		80DF3F9D2D02940000447B72 /* HealthKit-Final-ProjectTests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = "HealthKit-Final-ProjectTests";
-			sourceTree = "<group>";
-		};
-		80DF3FA72D02940000447B72 /* HealthKit-Final-ProjectUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = "HealthKit-Final-ProjectUITests";
-			sourceTree = "<group>";
-		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,8 +66,6 @@
 			isa = PBXGroup;
 			children = (
 				80DF3F8B2D0293FF00447B72 /* HealthKit-Final-Project */,
-				80DF3F9D2D02940000447B72 /* HealthKit-Final-ProjectTests */,
-				80DF3FA72D02940000447B72 /* HealthKit-Final-ProjectUITests */,
 				80DF3F8A2D0293FF00447B72 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -130,9 +118,6 @@
 			dependencies = (
 				80DF3F9C2D02940000447B72 /* PBXTargetDependency */,
 			);
-			fileSystemSynchronizedGroups = (
-				80DF3F9D2D02940000447B72 /* HealthKit-Final-ProjectTests */,
-			);
 			name = "HealthKit-Final-ProjectTests";
 			packageProductDependencies = (
 			);
@@ -152,9 +137,6 @@
 			);
 			dependencies = (
 				80DF3FA62D02940000447B72 /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				80DF3FA72D02940000447B72 /* HealthKit-Final-ProjectUITests */,
 			);
 			name = "HealthKit-Final-ProjectUITests";
 			packageProductDependencies = (

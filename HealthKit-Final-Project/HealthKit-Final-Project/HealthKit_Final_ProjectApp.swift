@@ -9,7 +9,7 @@ struct HealthKit_Final_ProjectApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            WelcomeView()
                 .environmentObject(HealthKitManager(healthStore: healthStore))
         }
     }

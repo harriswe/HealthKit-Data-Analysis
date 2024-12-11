@@ -1,3 +1,11 @@
+//
+//  WelcomeView.swift
+//  HealthKit-Final-Project
+//
+//  Created by Wesley Harrison on 12/10/24.
+//
+
+
 import SwiftUI
 
 struct WelcomeView: View {
@@ -17,7 +25,7 @@ struct WelcomeView: View {
                             .multilineTextAlignment(.center)
                             .shadow(radius: 5)
 
-                        Text("Track your health, stay fit, and achieve your goals effortlessly.")
+                        Text("See how HealthKit is capable of aggregating your health data.")
                             .font(.system(size: 18, weight: .medium))
                             .foregroundColor(Color.white.opacity(0.9))
                             .multilineTextAlignment(.center)

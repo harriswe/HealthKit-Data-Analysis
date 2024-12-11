@@ -19,7 +19,8 @@ class HealthKitManager: ObservableObject {
         let readTypes: Set<HKSampleType> = [
             HKObjectType.quantityType(forIdentifier: .stepCount)!,
             HKObjectType.quantityType(forIdentifier: .heartRate)!,
-            HKObjectType.quantityType(forIdentifier: .activeEnergyBurned)!
+            HKObjectType.quantityType(forIdentifier: .activeEnergyBurned)!,
+            HKObjectType.quantityType(forIdentifier: .respiratoryRate)!
         ]
 
         healthStore.requestAuthorization(toShare: nil, read: readTypes) { success, _ in
@@ -29,28 +30,37 @@ class HealthKitManager: ObservableObject {
         }
     }
 
-    // Check HealthKit Authorization Status
-    func checkAuthorizationStatus(completion: @escaping (Bool) -> Void) {
-        let heartRateType = HKObjectType.quantityType(forIdentifier: .heartRate)!
-        let status = healthStore.authorizationStatus(for: heartRateType)
-        DispatchQueue.main.async {
-            completion(status == .sharingAuthorized)
-        }
-    }
-
     // Fetch Heart Rate Data
     func fetchHeartRateData(completion: @escaping ([HKQuantitySample]?) -> Void) {
-        let heartRateType = HKQuantityType.quantityType(forIdentifier: .heartRate)!
-        let predicate = HKQuery.predicateForSamples(withStart: Date().addingTimeInterval(-7 * 24 * 60 * 60), // Last 7 days
-                                                     end: Date(),
-                                                     options: .strictEndDate)
+        let sampleType = HKObjectType.quantityType(forIdentifier: .heartRate)!
+        fetchData(for: sampleType, completion: completion)
+    }
 
-        let query = HKSampleQuery(sampleType: heartRateType,
-                                  predicate: predicate,
-                                  limit: HKObjectQueryNoLimit,
-                                  sortDescriptors: [NSSortDescriptor(key: HKSampleSortIdentifierEndDate, ascending: false)]) { _, samples, _ in
+    // Fetch Steps Data
+    func fetchStepCountData(completion: @escaping ([HKQuantitySample]?) -> Void) {
+        let sampleType = HKObjectType.quantityType(forIdentifier: .stepCount)!
+        fetchData(for: sampleType, completion: completion)
+    }
+
+    // Fetch Active Energy Burned Data
+    func fetchActiveEnergyBurnedData(completion: @escaping ([HKQuantitySample]?) -> Void) {
+        let sampleType = HKObjectType.quantityType(forIdentifier: .activeEnergyBurned)!
+        fetchData(for: sampleType, completion: completion)
+    }
+
+    private func fetchData(for sampleType: HKSampleType, completion: @escaping ([HKQuantitySample]?) -> Void) {
+        let query = HKSampleQuery(
+            sampleType: sampleType,
+            predicate: nil,
+            limit: HKObjectQueryNoLimit,
+            sortDescriptors: [NSSortDescriptor(key: HKSampleSortIdentifierStartDate, ascending: false)]
+        ) { query, samples, error in
             DispatchQueue.main.async {
-                completion(samples as? [HKQuantitySample])
+                if let samples = samples as? [HKQuantitySample] {
+                    completion(samples)
+                } else {
+                    completion(nil)
+                }
             }
         }
 

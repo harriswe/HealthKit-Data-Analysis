@@ -1,99 +1,182 @@
-// ContentView.swift
 import SwiftUI
 import HealthKit
 
 struct ContentView: View {
     @EnvironmentObject var healthDataManager: HealthKitManager
-        @State private var isAuthorized = false
-        @State private var heartRateData: [HKQuantitySample] = []
+    @State private var isAuthorized = false
+    @State private var heartRateData: [HKQuantitySample] = []
+    @State private var stepCountData: [HKQuantitySample] = []
+    @State private var activeEnergyBurnedData: [HKQuantitySample] = []
+    @State private var selectedView: String = "Data"
 
-        var body: some View {
-            VStack(spacing: 20) {
-                Text("Welcome to Health Tracker")
-                    .font(.largeTitle)
-                    .fontWeight(.bold)
-                Text("by Wesley Harrison and Jerod Muilenberg")
-                    .font(.title3)
+    var body: some View {
+        NavigationView {
+            ZStack {
+                // Background Gradient
+                LinearGradient(gradient: Gradient(colors: [Color.blue, Color.teal]), startPoint: .top, endPoint: .bottom)
+                    .ignoresSafeArea()
 
-                if isAuthorized {
-                    Text("Access Granted! Start exploring your health data.")
-                        .font(.headline)
-                        .multilineTextAlignment(.center)
-                        .padding()
+                VStack(spacing: 20) {
+                    // Title Section
+                    Text("Health Tracker")
+                        .font(.system(size: 34, weight: .bold))
+                        .foregroundColor(.white)
+                        .shadow(radius: 3)
+                        .padding(.top, 40)
 
-                    Button(action: fetchHeartRateData) {
-                        Text("View Heart Rate Data")
-                            .padding()
-                            .frame(maxWidth: .infinity)
-                            .background(Color.green)
-                            .foregroundColor(.white)
-                            .cornerRadius(10)
-                            .shadow(radius: 5)
+                    // View Selector
+                    Picker("", selection: $selectedView) {
+                        Text("Data").tag("Data")
+                        Text("Stats").tag("Stats")
                     }
-                    .padding(.horizontal)
+                    .pickerStyle(SegmentedPickerStyle())
+                    .padding(.horizontal, 20)
 
-                    if !heartRateData.isEmpty {
-                        List(heartRateData, id: \..uuid) { sample in
-                            VStack(alignment: .leading) {
-                                Text("Heart Rate: \(sample.quantity.doubleValue(for: HKUnit(from: "count/min"))) BPM")
-                                Text("Date: \(sample.startDate, formatter: dateFormatter)")
-                                    .font(.subheadline)
-                                    .foregroundColor(.gray)
+                    if selectedView == "Data" {
+                        // Health Data Grid
+                        if isAuthorized {
+                            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 20) {
+                                HealthDataCard(title: "Heart Rate", icon: "heart.fill", color: .red, data: heartRateData.map { $0.quantity.doubleValue(for: .count().unitDivided(by: .minute())) }, unit: "bpm")
+                                HealthDataCard(title: "Step Count", icon: "figure.walk", color: .green, data: stepCountData.map { $0.quantity.doubleValue(for: .count()) }, unit: "steps")
+                                HealthDataCard(title: "Energy Burned", icon: "flame.fill", color: .orange, data: activeEnergyBurnedData.map { $0.quantity.doubleValue(for: .kilocalorie()) }, unit: "kcal")
                             }
-                        }
-                    }
+                        } else {
+                            Text("Please grant access to HealthKit data.")
+                                .multilineTextAlignment(.center)
+                                .padding()
 
-                } else {
-                    Button(action: {
-                        healthDataManager.requestAuthorization { success in
-                            isAuthorized = success
+                            Button(action: requestAuthorization) {
+                                Text("Grant Access")
+                                    .fontWeight(.bold)
+                                    .padding()
+                                    .frame(maxWidth: .infinity)
+                                    .background(Color.white)
+                                    .foregroundColor(.blue)
+                                    .cornerRadius(10)
+                                    .shadow(radius: 3)
+                            }
+                            .padding(.horizontal)
                         }
-                    }) {
-                        Text("Request Health Data Access")
-                            .font(.headline)
-                            .padding(.vertical, 14)
-                            .padding(.horizontal, 20)
-                            .frame(maxWidth: .infinity)
-                            .foregroundColor(.white)
-                            .background(
-                                LinearGradient(gradient: Gradient(colors: [
-                                    Color.blue.opacity(0.8),
-                                    Color.blue
-                                ]), startPoint: .topLeading, endPoint: .bottomTrailing)
-                            )
-                            .cornerRadius(12)
-                            .shadow(color: Color.blue.opacity(0.4), radius: 8, x: 0, y: 4)
+                    } else {
+                        // HealthKit Stats View
+                        VStack(spacing: 20) {
+                            StatCard(title: "Total Heart Rate Data Points", value: "\(heartRateData.count)")
+                            StatCard(title: "Total Step Count Data Points", value: "\(stepCountData.count)")
+                            StatCard(title: "Total Energy Burned Data Points", value: "\(activeEnergyBurnedData.count)")
+                        }
+                        .padding(.horizontal)
                     }
-                    .padding(.horizontal)
                 }
-            }
-            .padding()
-            .onAppear {
-                healthDataManager.checkAuthorizationStatus { isAuthorized in
-                    self.isAuthorized = isAuthorized
-                }
+                .padding()
             }
         }
+        .onAppear(perform: checkAuthorization)
+    }
 
-        func fetchHeartRateData() {
-            healthDataManager.fetchHeartRateData { samples in
-                guard let samples = samples else { return }
-                heartRateData = samples
+    private func requestAuthorization() {
+        healthDataManager.requestAuthorization { success in
+            isAuthorized = success
+            if success {
+                fetchHealthData()
             }
-        }
-
-        private var dateFormatter: DateFormatter {
-            let formatter = DateFormatter()
-            formatter.dateStyle = .medium
-            formatter.timeStyle = .short
-            return formatter
         }
     }
 
-    struct ContentView_Previews: PreviewProvider {
-        static var previews: some View {
-            ContentView()
-                .environmentObject(HealthKitManager(healthStore: HKHealthStore()))
+    private func checkAuthorization() {
+        healthDataManager.requestAuthorization { success in
+            isAuthorized = success
+            if success {
+                fetchHealthData()
+            }
         }
     }
+
+    private func fetchHealthData() {
+        healthDataManager.fetchHeartRateData { data in
+            if let data = data {
+                heartRateData = data
+            }
+        }
+        healthDataManager.fetchStepCountData { data in
+            if let data = data {
+                stepCountData = data
+            }
+        }
+        healthDataManager.fetchActiveEnergyBurnedData { data in
+            if let data = data {
+                activeEnergyBurnedData = data
+            }
+        }
+    }
+}
+
+struct HealthDataCard: View {
+    let title: String
+    let icon: String
+    let color: Color
+    let data: [Double]
+    let unit: String
+
+    var body: some View {
+        VStack(alignment: .leading) {
+            HStack {
+                Image(systemName: icon)
+                    .font(.title)
+                    .foregroundColor(color)
+                    .padding(8)
+                    .background(color.opacity(0.2))
+                    .cornerRadius(10)
+
+                Text(title)
+                    .font(.headline)
+                    .foregroundColor(.primary)
+            }
+            .padding(.bottom, 5)
+
+            if data.isEmpty {
+                Text("No data available")
+                    .font(.subheadline)
+                    .foregroundColor(.gray)
+            } else {
+                ForEach(Array(data.prefix(5)), id: \.self) { value in
+                    HStack {
+                        Text(String(format: "%.1f", value))
+                            .font(.body)
+                        Spacer()
+                        Text(unit)
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                    }
+                }
+            }
+        }
+        .padding()
+        .background(Color(.secondarySystemBackground))
+        .cornerRadius(15)
+        .shadow(radius: 5)
+    }
+}
+
+struct StatCard: View {
+    let title: String
+    let value: String
+
+    var body: some View {
+        VStack(alignment: .leading) {
+            Text(title)
+                .font(.headline)
+                .foregroundColor(.white)
+
+            Text(value)
+                .font(.title)
+                .fontWeight(.bold)
+                .foregroundColor(.white)
+        }
+        .padding()
+        .frame(maxWidth: .infinity)
+        .background(Color.blue.opacity(0.8))
+        .cornerRadius(15)
+        .shadow(radius: 5)
+    }
+}
 
