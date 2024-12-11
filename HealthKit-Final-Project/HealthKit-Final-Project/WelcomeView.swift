@@ -30,7 +30,8 @@ struct WelcomeView: View {
                             .foregroundColor(Color.white.opacity(0.9))
                             .multilineTextAlignment(.center)
                             .padding(.horizontal, 40)
-                    }
+                            }
+                    
                     .padding(.top, 100)
 
                     // Image Section
@@ -57,6 +58,13 @@ struct WelcomeView: View {
                     .padding(.horizontal, 50)
 
                     Spacer()
+                    
+                    Text("By Wesley Harrison and Jerod Muilenburg")
+                        .font(.system(size: 12, weight: .light))
+                        .foregroundColor(Color.white.opacity(0.9))
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal, 40)
+
                 }
             }
         }
