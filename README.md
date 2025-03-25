@@ -61,17 +61,6 @@ This app prioritizes the secure and responsible management of healthcare data, e
 
 We are committed to protecting your health data and maintaining your trust by adhering to the highest standards of privacy and security.
 
-## Contributing
-
-We welcome contributions! To contribute to this project:
-
-1. **Fork the Repository:** Create your own copy of the repository.
-2. **Create a Branch:** Make a new branch for your feature or bug fix.
-3. **Make Changes:** Implement your changes and commit them with descriptive messages.
-4. **Submit a Pull Request:** Open a pull request with a clear explanation of your modifications.
-
-Please ensure your code adheres to the project's coding standards and includes relevant tests.
-
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more information.
@@ -79,4 +68,4 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 ---
 
 **Original Project Credits:**  
-This app is based on the final project for CIS 357 01 by Jerod Muilenburg and Wes Harrison.
+This app was created by Wes Harrison. Learn more about the developer at [wesharrison.info](http://wesharrison.info).
