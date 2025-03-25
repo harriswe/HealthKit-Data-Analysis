@@ -40,7 +40,26 @@ To set up and run this app on your iPhone, follow these steps:
 3. **Data Retrieval:** The app will automatically fetch health data from your Apple Watch.
 4. **Explore Analytics:** Navigate the app to view various analytics and visualizations of your health metrics.
 
-<!-- Screenshots or GIFs can be added here to showcase the app's interface and features. -->
+## Healthcare Data Management and HIPPA Compliance
+
+This app prioritizes the secure and responsible management of healthcare data, ensuring compliance with the **Health Insurance Portability and Accountability Act (HIPPA)**. Below is an overview of our healthcare data management processes and how we maintain HIPPA compliance:
+
+- **Data Handling:**  
+  The app retrieves health data from HealthKit only after obtaining explicit user permission. All processing of this data occurs locally on your device, reducing the risk of unauthorized access or exposure.
+
+- **User Consent:**  
+  Upon first use, the app prompts you to grant permission to access HealthKit data. You have full control and can revoke this permission at any time through your device's settings, ensuring your data is only accessed with your approval.
+
+- **Data Security:**  
+  Any health data stored locally by the app is protected with industry-standard encryption. Additionally, the app does not transmit your data to external servers unless you explicitly authorize it, safeguarding your privacy.
+
+- **No Third-Party Sharing:**  
+  Your health data is never shared with third parties without your explicit consent, aligning with HIPPA's strict requirements for protecting sensitive information.
+
+- **HIPPA Compliance Statement:**  
+  This app is designed to meet HIPPA standards for the protection of personal health information. We have implemented robust safeguards to ensure data privacy and security. However, as HIPPA compliance involves complex legal considerations, we recommend consulting a legal expert to confirm compliance in your specific use case.
+
+We are committed to protecting your health data and maintaining your trust by adhering to the highest standards of privacy and security.
 
 ## Contributing
 
@@ -55,12 +74,9 @@ Please ensure your code adheres to the project's coding standards and includes r
 
 ## License
 
-This project is licensed under the MIT License. See the MIT Licensure for more information.
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more information.
 
 ---
 
 **Original Project Credits:**  
 This app is based on the final project for CIS 357 01 by Jerod Muilenburg and Wes Harrison.
-Fork of a final project for CIS 357 01 by Jerod Muilenburg and Wes Harrison
-
-[See the HealthKit Data Tutorial Here](/HealthKit_Data_Tutorial.pdf)
